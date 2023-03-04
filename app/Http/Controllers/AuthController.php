@@ -10,6 +10,12 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+
+    public function connection()
+    {
+        return '200 ok';
+    }
+
     /**
      * authenticate the user.
      *
