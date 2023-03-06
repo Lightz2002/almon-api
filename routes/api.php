@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExpenseCategoryController;
+use App\Http\Controllers\SecurityQuestionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
 
+    Route::resource('security-question', SecurityQuestionController::class);
     Route::resource('expense-category', ExpenseCategoryController::class);
 });
 
