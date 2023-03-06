@@ -18,9 +18,22 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/users', [UserController::class, 'index']);
+    Route::controller(UserController::class)->group(function () {
+        Route::get('/users', 'index');
+        Route::get('/profile', 'profile');
+    });
+
+
+    Route::resource('expense-category', ExpenseCategoryController::class);
 });
 
-Route::get('/connection', [AuthController::class, 'connection'])->name('connection');
-Route::post('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::controller(AuthController::class)->group(function () {
+    Route::get('/connection', 'connection');
+    Route::post('/login', 'login');
+    Route::post('/register', 'register');
+});
+
+
+// Route::get('/connection', [AuthController::class, 'connection'])->name('connection');
+// Route::post('/register', [AuthController::class, 'register'])->name('register');
+// Route::post('/login', [AuthController::class, 'login'])->name('login');
