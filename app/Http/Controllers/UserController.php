@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -52,6 +53,18 @@ class UserController extends Controller
   public function show(User $User)
   {
     //
+  }
+
+  /**
+   * Return the logged in user.
+   *
+   * @param  \App\Models\User  $User
+   * @return \Illuminate\Http\Response
+   */
+  public function profile()
+  {
+    $user = Auth::user();
+    return response()->json($user, Response::HTTP_OK);
   }
 
   /**
