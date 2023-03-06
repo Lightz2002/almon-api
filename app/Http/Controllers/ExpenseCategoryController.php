@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ExpenseCategoryResource;
 use App\Models\ExpenseCategory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ExpenseCategoryController extends Controller
 {
@@ -14,7 +16,8 @@ class ExpenseCategoryController extends Controller
      */
     public function index()
     {
-        return ExpenseCategory::all();
+        $expenseCategories = ExpenseCategory::all();
+        return ExpenseCategoryResource::collection($expenseCategories);
     }
 
     /**
