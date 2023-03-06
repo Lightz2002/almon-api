@@ -58,16 +58,12 @@ class AuthController extends Controller
         try {
             // 1. validate the requests
             $request->validate([
-                'email' => 'required|email',
-                'username' => 'required',
+                'email' => 'required|email|unique:users',
+                'username' => 'required|unique:users',
                 'password' => 'required',
                 'security_question_id' => 'required',
                 'security_question_answer' => 'required',
             ]);
-
-            // 2. check if there is any user registed with the same email
-            $duplicate = User::firstWhere('email', $request->email);
-            if ($duplicate) throw ValidationException::withMessages(['duplicate' => 'there is already a user with the same email !']);
 
             // 3. create an account
             $user = new User();
