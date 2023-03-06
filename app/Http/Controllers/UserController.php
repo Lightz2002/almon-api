@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -17,10 +18,7 @@ class UserController extends Controller
   public function index()
   {
     $users = User::all();
-    return response()->json([
-      'data' => $users,
-      'statusCode' => 200
-    ], Response::HTTP_OK);
+    return response(UserResource::collection($users), Response::HTTP_OK);
   }
 
   /**
@@ -64,7 +62,7 @@ class UserController extends Controller
   public function profile()
   {
     $user = Auth::user();
-    return response()->json($user, Response::HTTP_OK);
+    return new UserResource($user);
   }
 
   /**
