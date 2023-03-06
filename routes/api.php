@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExpenseCategoryController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\SecurityQuestionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/profile', 'profile');
     });
 
-
+    Route::resource('expense', ExpenseController::class);
     Route::resource('security-question', SecurityQuestionController::class);
     Route::resource('expense-category', ExpenseCategoryController::class);
 });
