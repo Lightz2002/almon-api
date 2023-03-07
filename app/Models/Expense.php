@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\SelfExpenseScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,6 +11,36 @@ use Illuminate\Database\Eloquent\Model;
 class Expense extends Model
 {
     use HasFactory, HasUuids;
+
+    /* Relationships */
+    /**
+     * Get the user who has this expense
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the category of this expenses
+     */
+    public function expense_category()
+    {
+        return $this->belongsTo(ExpenseCategory::class);
+    }
+
+
+
+    /* Scopes */
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope(new SelfExpenseScope);
+    }
 
     /**
      * Scope a query to only this month expense.
