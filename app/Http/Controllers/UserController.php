@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Services\ExpenseAllocationService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+  public function __construct()
+  {
+    $this->expenseAllocationService = new ExpenseAllocationService();
+  }
+
+
   /**
    * Display a listing of the resource.
    *
@@ -19,6 +26,29 @@ class UserController extends Controller
   {
     $users = User::all();
     return UserResource::collection($users);
+  }
+
+  /**
+   * Update user monthly salary.
+   * @param \Illuminate\Http\Request
+   * @return \Illuminate\Http\Response
+   */
+  public function updateSalary(Request $request)
+  {
+    try {
+      $request->validate([
+        'monthly_salary' => 'required|numeric'
+      ]);
+
+      $user = Auth::user();
+      $user->monthly_salary = $request->monthly_salary;
+      $user->save();
+
+      // generate allocation
+      return $this->expenseAllocationService->generateAllocation($user);
+    } catch (\Exception $e) {
+      return handleException($e);
+    }
   }
 
   /**

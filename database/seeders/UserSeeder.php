@@ -30,6 +30,7 @@ class UserSeeder extends Seeder
     $user->password = Hash::make('123');
     $user->security_question_id = SecurityQuestion::firstWhere('name', 'Smartphone pertama Anda ?')->id;
     $user->security_question_answer = 'Samsung';
+    $user->monthly_salary = 4500000;
     $user->save();
   }
 }
