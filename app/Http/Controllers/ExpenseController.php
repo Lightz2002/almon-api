@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ExpenseResource;
 use App\Models\Expense;
+use App\Models\ExpenseAllocation;
+use App\Models\ExpenseCategory;
+use App\Services\ExpenseAllocationService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class ExpenseController extends Controller
 {
+    protected $expenseAllocationService;
 
     private function validateInput(Request $request)
     {
@@ -29,6 +33,11 @@ class ExpenseController extends Controller
         $expense->save();
 
         return $expense;
+    }
+
+    public function __construct()
+    {
+        $this->expenseAllocationService = new ExpenseAllocationService();
     }
 
     /**
@@ -104,5 +113,73 @@ class ExpenseController extends Controller
     {
         $expense->delete();
         return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+
+    private function calculateRemain()
+    {
+        $user = Auth::user();
+        $monthlySalary = $user->monthly_salary;
+        $monthlyExpenses = Expense::month()->get()->sum('amount');
+        $monthlyRemain = $monthlySalary - $monthlyExpenses;
+
+        return (object) [
+            'salary' => $monthlySalary,
+            'expenses' => $monthlyExpenses,
+            'remain' => $monthlyRemain,
+        ];
+    }
+
+    /**
+     * Get Monthly Expense, Salary, and LeftOvers
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function budgetInfo()
+    {
+        return response()->json($this->calculateRemain(), Response::HTTP_OK);
+    }
+
+    /**
+     * Sum expense amount by category
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sumAmountByCategory($monthlyExpense, $expenseCategory)
+    {
+        $filteredExpense = $monthlyExpense->filter(function ($item) use ($expenseCategory) {
+            return $item->expense_category->name === $expenseCategory->name;
+        });
+
+        return $filteredExpense->first()->amount ?? 0;
+    }
+
+    /**
+     * Get Monthly Expense, Salary, and LeftOvers
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function summary()
+    {
+        $remain = $this->calculateRemain();
+
+        $expenseCategories = ExpenseCategory::all();
+        $expenseAllocations = ExpenseAllocation::get();
+        $monthlyExpense = Expense::month()->get();
+
+        $data = (object) [
+            'salary' => $remain->salary,
+            'expenses' => $remain->expenses,
+            'remain' => $remain->remain,
+            'categories' => []
+        ];
+
+        foreach ($expenseCategories as $expenseCategory) {
+            $expenseCategory->allocation = $this->expenseAllocationService->getAllocationAmountByCategory($expenseAllocations, $expenseCategory);
+            $expenseCategory->expense = $this->sumAmountByCategory($monthlyExpense, $expenseCategory);
+            $data->categories[] = $expenseCategory;
+        }
+
+        return response()->json($data, Response::HTTP_OK);
     }
 }
