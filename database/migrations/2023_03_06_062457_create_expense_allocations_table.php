@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\User;
+use App\Models\ExpenseCategory;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,10 +15,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('expense_categories', function (Blueprint $table) {
+        Schema::create('expense_allocations', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
-            $table->string('icon')->nullable();
+            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(ExpenseCategory::class);
+            $table->bigInteger('amount');
+            $table->smallInteger('percentage');
             $table->timestamps();
         });
     }
@@ -28,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('expense_categories');
+        Schema::dropIfExists('expense_allocations');
     }
 };
