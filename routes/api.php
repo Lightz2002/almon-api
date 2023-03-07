@@ -36,7 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::resource('expense-category', ExpenseCategoryController::class);
 
-    Route::post('expense-allocation/generate', [ExpenseAllocationController::class, 'generateAllocation']);
+    Route::post('expense-allocation/generate/{user}', [ExpenseAllocationController::class, 'generateAllocation']);
 });
 
 Route::controller(AuthController::class)->group(function () {

@@ -15,9 +15,8 @@ class ExpenseAllocationController extends Controller
         $this->expenseAllocationService = new ExpenseAllocationService();
     }
 
-    public function generateAllocation($userId)
+    public function generateAllocation(User $user)
     {
-        $user = User::findOrFail($userId);
         return $this->expenseAllocationService->generateAllocation($user);
     }
 }
