@@ -10,6 +10,22 @@ use Illuminate\Support\Facades\Auth;
 
 class ExpenseAllocationService
 {
+
+  /**
+   * get allocation by user
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function getAllocationByUser(User $user)
+  {
+    try {
+      $allocations = ExpenseAllocation::getByUser($user->id)->get();
+      return ExpenseAllocationResource::collection($allocations);
+    } catch (\Exception $e) {
+      return handleException($e);
+    }
+  }
+
   /**
    * Generate allocation for user
    *

@@ -19,4 +19,9 @@ class ExpenseAllocationController extends Controller
     {
         return $this->expenseAllocationService->generateAllocation($user);
     }
+
+    public function index(User $user)
+    {
+        return $this->expenseAllocationService->getAllocationByUser($user);
+    }
 }
