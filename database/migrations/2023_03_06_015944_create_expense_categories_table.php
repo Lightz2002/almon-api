@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('expense_categories', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
+            $table->string('name', 15);
             $table->string('icon')->nullable();
             $table->timestamps();
         });

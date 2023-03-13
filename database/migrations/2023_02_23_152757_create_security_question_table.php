@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('security_questions', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
+            $table->string('name', '25');
             $table->timestamps();
         });
     }
