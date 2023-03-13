@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreignIdFor(ExpenseCategory::class);
             $table->bigInteger('amount');
             $table->smallInteger('percentage');
+            $table->string('color', 25);
             $table->timestamps();
         });
     }

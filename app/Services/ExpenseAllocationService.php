@@ -92,6 +92,7 @@ class ExpenseAllocationService
     $allocation1->expense_category_id = $expenseCategories->firstWhere('name', 'Kebutuhan')->id;
     $allocation1->percentage = 50;
     $allocation1->amount = $this->calculateAmount($allocation1->percentage);
+    $allocation1->color = "#FFAC00";
     $allocation1->save();
 
     $allocation2 = new ExpenseAllocation();
@@ -99,6 +100,7 @@ class ExpenseAllocationService
     $allocation2->expense_category_id = $expenseCategories->firstWhere('name', 'Tabungan')->id;
     $allocation2->percentage = 20;
     $allocation2->amount = $this->calculateAmount($allocation2->percentage);
+    $allocation2->color = "#FE7E01";
     $allocation2->save();
 
     $allocation3 = new ExpenseAllocation();
@@ -106,6 +108,7 @@ class ExpenseAllocationService
     $allocation3->expense_category_id = $expenseCategories->firstWhere('name', 'Gaya Hidup')->id;
     $allocation3->percentage = 15;
     $allocation3->amount = $this->calculateAmount($allocation3->percentage);
+    $allocation2->color = "#FE3700";
     $allocation3->save();
 
     $allocation4 = new ExpenseAllocation();
@@ -113,6 +116,7 @@ class ExpenseAllocationService
     $allocation4->expense_category_id = $expenseCategories->firstWhere('name', 'Dana Darurat')->id;
     $allocation4->percentage = 10;
     $allocation4->amount = $this->calculateAmount($allocation4->percentage);
+    $allocation2->color = "#D3014C";
     $allocation4->save();
 
     $allocation5 = new ExpenseAllocation();
@@ -120,6 +124,7 @@ class ExpenseAllocationService
     $allocation5->expense_category_id = $expenseCategories->firstWhere('name', 'Sedekah')->id;
     $allocation5->percentage = 5;
     $allocation5->amount = $this->calculateAmount($allocation5->percentage);
+    $allocation2->color = "#A8006D";
     $allocation5->save();
 
     return [$allocation1, $allocation2, $allocation3, $allocation4, $allocation5];
