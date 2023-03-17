@@ -21,7 +21,7 @@ class ExpenseController extends Controller
             'date' => 'required|date_format:Y-m-d',
             'amount' => 'required|numeric',
             'expense_category_id' => 'required',
-        ]);
+        ], getValidationMessage());
     }
 
     private function fillInput(Expense $expense, Request $request)

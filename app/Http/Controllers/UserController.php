@@ -38,7 +38,7 @@ class UserController extends Controller
     try {
       $request->validate([
         'monthly_salary' => 'required|numeric'
-      ]);
+      ], getValidationMessage());
 
       $user = Auth::user();
       $user->monthly_salary = $request->monthly_salary;
