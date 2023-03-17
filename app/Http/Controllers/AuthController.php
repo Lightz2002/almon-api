@@ -33,7 +33,7 @@ class AuthController extends Controller
                 'username' => 'required',
                 'password' => 'required',
                 'device_name' => 'required',
-            ]);
+            ], getValidationMessage());
 
             // 2. if the credentials are wrong, throw validation
             $user = User::firstWhere("username", $request->username);
@@ -67,7 +67,7 @@ class AuthController extends Controller
                 'password' => 'required',
                 'security_question_id' => 'required|uuid',
                 'security_question_answer' => 'required',
-            ]);
+            ], getValidationMessage());
 
             // 3. create an account
             $user = new User();
@@ -101,7 +101,7 @@ class AuthController extends Controller
                 'username' => 'required',
                 'email' => 'required|email',
                 'security_question_answer' => 'required',
-            ]);
+            ], getValidationMessage());
 
             $authenticated = User::where('username', $request->username)
                 ->where('email', $request->email)
@@ -146,13 +146,18 @@ class AuthController extends Controller
             // 1. validate request like email, body
             $request->validate([
                 'password' => 'required',
-                'reset_password_token' => 'required'
-            ]);
+            ], getValidationMessage());
 
             $tokenData = DB::table('password_resets')->where('token', $request->reset_password_token)->first();
-            if (!$tokenData) $this->sendValidationMessage();
+            if (!$tokenData) $this->sendValidationMessage('password-unauthorized');
 
-            $user = Auth::user();
+            $user = User::where('username', $request->username)->where('email', $request->email)->first();
+            if (!$user || !$request->has('reset_password_token')) {
+                return response()->json([
+                    'status' => 401,
+                    'message' => 'Kamu tidak memiliki akses untuk ini !'
+                ], Response::HTTP_UNAUTHORIZED);
+            }
             $user->password = Hash::make($request->password);
             $user->save();
 
@@ -172,10 +177,20 @@ class AuthController extends Controller
             ->where('email', $request->email)->first() ?? null;
     }
 
-    private function sendValidationMessage()
+    private function sendValidationMessage($type = 'unauthorized')
     {
+        $message = '';
+        switch (strtolower($type)) {
+            case 'unauthorized':
+                $message = 'Tidak ada user yang ditemukan dengan data yang diberikan';
+                break;
+            case 'password-unauthorized':
+                $message = 'Kamu tidak memiliki akses ganti password';
+                break;
+        }
+
         throw ValidationException::withMessages(
-            ['message' => 'The provided credentials are incorrect']
+            ['message' => $message]
         );
     }
 }

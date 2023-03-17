@@ -45,3 +45,38 @@ if (!function_exists('handleException')) {
     ], $statusCode);
   }
 }
+
+
+
+if (!function_exists('getValidationMessage')) {
+  /**
+   * Return the custom validation message
+   *
+   * @template TValue
+   * @template TReturn
+   *
+   * @return object
+   */
+  function getValidationMessage()
+  {
+    $requiredMessage = ' wajib diisi';
+    $numericFormat = ' harus merupakan angka';
+    return [
+      'password.required' => 'Password' . $requiredMessage,
+      'email.required' => 'Email' . $requiredMessage,
+      'email.email' => 'Email harus menggunakan format yang sesuai',
+      'username.required' => 'Username' . $requiredMessage,
+      'security_question_answer.required' => 'Jawaban keamanan' . $requiredMessage,
+      'security_question_id.required' => 'Pertanyaan keamanan wajib dipilih',
+      'security_question_id.uuid' => 'Nilai pertanyaan keamanan yang dipilih tidak sesuai',
+      'device_name.required' => 'Model perangkat tidak diketahui',
+      'date.required' => 'Tanggal' . $requiredMessage,
+      'date.date_format:Y-m-d' => 'Tanggal harus menggunakan format sesuai contohnya 2023-01-31',
+      'amount.required' => 'Jumlah' . $requiredMessage,
+      'amount.numeric' => 'Jumlah' . $numericFormat,
+      'expense_category_id.required' => 'Kategori pengeluaran' . $requiredMessage,
+      'monthly_salary.required' => 'Gaji' . $requiredMessage,
+      'monthly_salary.numeric' => 'Gaji' . $numericFormat
+    ];
+  }
+}
