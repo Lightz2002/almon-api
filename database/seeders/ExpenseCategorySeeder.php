@@ -17,27 +17,27 @@ class ExpenseCategorySeeder extends Seeder
     {
         $category1 = new ExpenseCategory();
         $category1->name = 'Sedekah';
-        $category1->icon = public_path('images/love.png');
+        $category1->icon = env("APP_URL", "https://almon.ryankenidy.site") . '/images/love.png';
         $category1->save();
 
         $category2 = new ExpenseCategory();
         $category2->name = 'Dana Darurat';
-        $category2->icon = public_path('images/emergency.png');
+        $category2->icon = env("APP_URL", "https://almon.ryankenidy.site") . ('/images/emergency.png');
         $category2->save();
 
         $category3 = new ExpenseCategory();
         $category3->name = 'Gaya Hidup';
-        $category3->icon = public_path('images/lifestyle.png');
+        $category3->icon = env("APP_URL", "https://almon.ryankenidy.site") . '/images/lifestyle.png';
         $category3->save();
 
         $category4 = new ExpenseCategory();
         $category4->name = 'Tabungan';
-        $category4->icon = public_path('images/salary.png');
+        $category4->icon = env("APP_URL", "https://almon.ryankenidy.site") . '/images/salary.png';
         $category4->save();
 
         $category5 = new ExpenseCategory();
         $category5->name = 'Kebutuhan';
-        $category5->icon = public_path('images/basic-needs 1.png');
+        $category5->icon = env("APP_URL", "https://almon.ryankenidy.site") . '/images/basic-needs 1.png';
         $category5->save();
     }
 }
