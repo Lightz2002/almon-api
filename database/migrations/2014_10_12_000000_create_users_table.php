@@ -20,10 +20,10 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('security_question_answer');
+            $table->string('security_question_answer')->nullable();
             $table->bigInteger('monthly_salary')->default(0);
             $table->string('phone_number')->nullable();
-            $table->foreignIdFor(SecurityQuestion::class);
+            $table->foreignIdFor(SecurityQuestion::class)->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
