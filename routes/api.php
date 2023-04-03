@@ -44,6 +44,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/login', 'login');
     Route::post('/register', 'register');
     Route::post('/validate-forget-password', 'validateForgetPassword');
+    Route::post('/send-forget-password-email', 'sendForgetPasswordEmail');
     Route::post('/reset-password', 'resetPassword');
 });
 

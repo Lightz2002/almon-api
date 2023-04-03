@@ -21,7 +21,6 @@ if (!function_exists('handleException')) {
     $data = [];
     $message = 'Server Error';
 
-
     if ($exception instanceof ValidationException) {
       $statusCode = 422;
       $message = $exception->getMessage();
@@ -32,7 +31,9 @@ if (!function_exists('handleException')) {
     } elseif ($exception instanceof ModelNotFoundException) {
       $statusCode = 404;
       $message = 'Resource not found';
-    } elseif ($exception instanceof QueryException) {
+    } elseif ($exception instanceof QueryException || $exception instanceof InvalidArgumentException) {
+      dd($exception);
+    } else {
       dd($exception);
     }
 
@@ -76,7 +77,8 @@ if (!function_exists('getValidationMessage')) {
       'amount.numeric' => 'Jumlah' . $numericFormat,
       'expense_category_id.required' => 'Kategori pengeluaran' . $requiredMessage,
       'monthly_salary.required' => 'Gaji' . $requiredMessage,
-      'monthly_salary.numeric' => 'Gaji' . $numericFormat
+      'monthly_salary.numeric' => 'Gaji' . $numericFormat,
+      'token.size' => 'Token harus berupa 6 karakter',
     ];
   }
 }
