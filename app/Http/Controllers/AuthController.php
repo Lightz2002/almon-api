@@ -201,7 +201,7 @@ class AuthController extends Controller
         try {
             // 1. validate user email
             $request->validate([
-                'token' => 'required|size:6',
+                'token' => 'required',
             ], getValidationMessage());
 
             $user = $this->getUserByEmail($request);
@@ -244,22 +244,18 @@ class AuthController extends Controller
                 'password' => 'required',
             ], getValidationMessage());
 
-            $tokenData = DB::table('password_resets')->where('token', $request->reset_password_token)->first();
-            if (!$tokenData) $this->sendValidationMessage('password-unauthorized');
+            $tokenData = DB::table('password_resets')->where('token', $request->token)->first();
+            $user = User::where('email', $request->email)->first();
+            if (!$tokenData || (!$user || !$request->has('token'))) $this->sendValidationMessage('password-unauthorized');
 
-            $user = User::where('username', $request->username)->where('email', $request->email)->first();
-            if (!$user || !$request->has('reset_password_token')) {
-                return response()->json([
-                    'status' => 401,
-                    'message' => 'Kamu tidak memiliki akses untuk ini !'
-                ], Response::HTTP_UNAUTHORIZED);
-            }
             $user->password = Hash::make($request->password);
             $user->save();
+            DB::table('password_resets')->where('token', $request->token)->delete();
+
 
             return response()->json([
                 'status' => 200,
-                'message' => 'success'
+                'message' => 'password berhasil diganti'
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             return handleException($e);
@@ -281,7 +277,7 @@ class AuthController extends Controller
                 $message = 'Tidak ada user yang ditemukan dengan data yang diberikan';
                 break;
             case 'password-unauthorized':
-                $message = 'Kamu tidak memiliki akses ganti password';
+                $message = 'Ulang kirim email dan token untuk ganti password';
                 break;
             case 'no-token':
                 $message = "Kirim token reset password ke email anda terlebih dahulu";
