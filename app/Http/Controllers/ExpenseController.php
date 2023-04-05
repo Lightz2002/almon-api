@@ -48,7 +48,9 @@ class ExpenseController extends Controller
     public function index()
     {
         $expenses = Expense::month()->orderBy('created_at')->get();
-        return ExpenseResource::collection($expenses);
+        return [
+            "data" => ExpenseResource::collection($expenses)->groupBy('date')
+        ];
     }
 
     /**
