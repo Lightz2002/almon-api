@@ -45,7 +45,10 @@ class ExpenseAllocationService
       foreach ($allocations as $allocation) {
         switch (strtolower($allocation->expense_category->name)) {
           case 'kebutuhan':
-            $allocation->percentage = 50;
+            $allocation->percentage = 30;
+            break;
+          case 'cicilan':
+            $allocation->percentage = 20;
             break;
           case 'tabungan':
             $allocation->percentage = 20;
@@ -62,7 +65,7 @@ class ExpenseAllocationService
         }
 
         $allocation->save();
-        $allocation->amount = $this->calculateAmount($allocation->percentage);
+        $allocation->amount = $this->calculateAllocationAmount($allocation->percentage, $user->monthly_salary);
         $allocation->save();
       }
 
@@ -90,8 +93,8 @@ class ExpenseAllocationService
     $allocation1 = new ExpenseAllocation();
     $allocation1->user_id = $user->id;
     $allocation1->expense_category_id = $expenseCategories->firstWhere('name', 'Kebutuhan')->id;
-    $allocation1->percentage = 50;
-    $allocation1->amount = $this->calculateAmount($allocation1->percentage);
+    $allocation1->percentage = 30;
+    $allocation1->amount = $this->calculateAllocationAmount($allocation1->percentage, $user->monthly_salary);
     $allocation1->color = "#FFAC00";
     $allocation1->save();
 
@@ -99,7 +102,7 @@ class ExpenseAllocationService
     $allocation2->user_id = $user->id;
     $allocation2->expense_category_id = $expenseCategories->firstWhere('name', 'Tabungan')->id;
     $allocation2->percentage = 20;
-    $allocation2->amount = $this->calculateAmount($allocation2->percentage);
+    $allocation2->amount = $this->calculateAllocationAmount($allocation2->percentage, $user->monthly_salary);
     $allocation2->color = "#FE7E01";
     $allocation2->save();
 
@@ -107,27 +110,35 @@ class ExpenseAllocationService
     $allocation3->user_id = $user->id;
     $allocation3->expense_category_id = $expenseCategories->firstWhere('name', 'Gaya Hidup')->id;
     $allocation3->percentage = 15;
-    $allocation3->amount = $this->calculateAmount($allocation3->percentage);
-    $allocation2->color = "#FE3700";
+    $allocation3->amount = $this->calculateAllocationAmount($allocation3->percentage, $user->monthly_salary);
+    $allocation3->color = "#FE3700";
     $allocation3->save();
 
     $allocation4 = new ExpenseAllocation();
     $allocation4->user_id = $user->id;
     $allocation4->expense_category_id = $expenseCategories->firstWhere('name', 'Dana Darurat')->id;
     $allocation4->percentage = 10;
-    $allocation4->amount = $this->calculateAmount($allocation4->percentage);
-    $allocation2->color = "#D3014C";
+    $allocation4->amount = $this->calculateAllocationAmount($allocation4->percentage, $user->monthly_salary);
+    $allocation4->color = "#D3014C";
     $allocation4->save();
 
     $allocation5 = new ExpenseAllocation();
     $allocation5->user_id = $user->id;
     $allocation5->expense_category_id = $expenseCategories->firstWhere('name', 'Sedekah')->id;
     $allocation5->percentage = 5;
-    $allocation5->amount = $this->calculateAmount($allocation5->percentage);
-    $allocation2->color = "#A8006D";
+    $allocation5->amount = $this->calculateAllocationAmount($allocation5->percentage, $user->monthly_salary);
+    $allocation5->color = "#A8006D";
     $allocation5->save();
 
-    return [$allocation1, $allocation2, $allocation3, $allocation4, $allocation5];
+    $allocation6 = new ExpenseAllocation();
+    $allocation6->user_id = $user->id;
+    $allocation6->expense_category_id = $expenseCategories->firstWhere('name', 'Cicilan')->id;
+    $allocation6->percentage = 20;
+    $allocation6->amount = $this->calculateAllocationAmount($allocation6->percentage, $user->monthly_salary);
+    $allocation6->color = "#650041";
+    $allocation6->save();
+
+    return [$allocation1, $allocation2, $allocation3, $allocation4, $allocation5, $allocation6];
   }
 
   /**
@@ -135,9 +146,9 @@ class ExpenseAllocationService
    *
    * @return int;
    */
-  protected function calculateAmount($percentage)
+  protected function calculateAllocationAmount($percentage, $salary)
   {
-    $salary = Auth::user()->monthly_salary;
-    return $salary * $percentage / 100;
+    $allocationAmount = $salary * $percentage / 100;
+    return $allocationAmount;
   }
 }
