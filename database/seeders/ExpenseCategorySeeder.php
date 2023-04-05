@@ -39,5 +39,10 @@ class ExpenseCategorySeeder extends Seeder
         $category5->name = 'Kebutuhan';
         $category5->icon = env("APP_URL", "https://almon.ryankenidy.site") . '/images/basic-needs 1.png';
         $category5->save();
+
+        $category6 = new ExpenseCategory();
+        $category6->name = 'Cicilan';
+        $category6->icon = env("APP_URL", "https://almon.ryankenidy.site") . '/images/installment.png';
+        $category6->save();
     }
 }
