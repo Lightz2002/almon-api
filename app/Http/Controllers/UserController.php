@@ -8,6 +8,7 @@ use App\Services\ExpenseAllocationService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -115,7 +116,29 @@ class UserController extends Controller
    */
   public function update(Request $request, User $User)
   {
-    //
+    try {
+      $request->validate([
+        'monthly_salary' => 'required|numeric',
+        'email' => [
+          Rule::unique('users')->ignore($User->id),
+          'required'
+        ],
+        'username' => [
+          Rule::unique('users')->ignore($User->id),
+          'required'
+        ]
+      ], getValidationMessage());
+
+      $User->monthly_salary = $request->monthly_salary;
+      $User->username = $request->username;
+      $User->email = $request->email;
+      $User->save();
+
+      // generate allocation
+      return $this->expenseAllocationService->generateAllocation($User);
+    } catch (\Exception $e) {
+      return handleException($e);
+    }
   }
 
   /**
