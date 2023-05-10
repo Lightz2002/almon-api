@@ -16,8 +16,8 @@ class TransactionCategoryController extends Controller
      */
     public function index()
     {
-        $expenseCategories = TransactionCategory::all();
-        return TransactionCategoryResource::collection($expenseCategories);
+        $transactionCategories = TransactionCategory::all();
+        return TransactionCategoryResource::collection($transactionCategories);
     }
 
     /**

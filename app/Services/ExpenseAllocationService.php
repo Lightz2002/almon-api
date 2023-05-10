@@ -88,11 +88,11 @@ class ExpenseAllocationService
 
   protected function create(User $user)
   {
-    $expenseCategories = TransactionCategory::all();
+    $transactionCategories = TransactionCategory::all();
 
     $allocation1 = new ExpenseAllocation();
     $allocation1->user_id = $user->id;
-    $allocation1->transaction_category_id = $expenseCategories->firstWhere('name', 'Kebutuhan')->id;
+    $allocation1->transaction_category_id = $transactionCategories->firstWhere('name', 'Kebutuhan')->id;
     $allocation1->percentage = 30;
     $allocation1->amount = $this->calculateAllocationAmount($allocation1->percentage, $user->monthly_salary);
     $allocation1->color = "#FFAC00";
@@ -100,7 +100,7 @@ class ExpenseAllocationService
 
     $allocation2 = new ExpenseAllocation();
     $allocation2->user_id = $user->id;
-    $allocation2->transaction_category_id = $expenseCategories->firstWhere('name', 'Tabungan')->id;
+    $allocation2->transaction_category_id = $transactionCategories->firstWhere('name', 'Tabungan')->id;
     $allocation2->percentage = 20;
     $allocation2->amount = $this->calculateAllocationAmount($allocation2->percentage, $user->monthly_salary);
     $allocation2->color = "#FE7E01";
@@ -108,7 +108,7 @@ class ExpenseAllocationService
 
     $allocation3 = new ExpenseAllocation();
     $allocation3->user_id = $user->id;
-    $allocation3->transaction_category_id = $expenseCategories->firstWhere('name', 'Gaya Hidup')->id;
+    $allocation3->transaction_category_id = $transactionCategories->firstWhere('name', 'Gaya Hidup')->id;
     $allocation3->percentage = 15;
     $allocation3->amount = $this->calculateAllocationAmount($allocation3->percentage, $user->monthly_salary);
     $allocation3->color = "#FE3700";
@@ -116,7 +116,7 @@ class ExpenseAllocationService
 
     $allocation4 = new ExpenseAllocation();
     $allocation4->user_id = $user->id;
-    $allocation4->transaction_category_id = $expenseCategories->firstWhere('name', 'Dana Darurat')->id;
+    $allocation4->transaction_category_id = $transactionCategories->firstWhere('name', 'Dana Darurat')->id;
     $allocation4->percentage = 10;
     $allocation4->amount = $this->calculateAllocationAmount($allocation4->percentage, $user->monthly_salary);
     $allocation4->color = "#D3014C";
@@ -124,7 +124,7 @@ class ExpenseAllocationService
 
     $allocation5 = new ExpenseAllocation();
     $allocation5->user_id = $user->id;
-    $allocation5->transaction_category_id = $expenseCategories->firstWhere('name', 'Sedekah')->id;
+    $allocation5->transaction_category_id = $transactionCategories->firstWhere('name', 'Sedekah')->id;
     $allocation5->percentage = 5;
     $allocation5->amount = $this->calculateAllocationAmount($allocation5->percentage, $user->monthly_salary);
     $allocation5->color = "#A8006D";
@@ -132,7 +132,7 @@ class ExpenseAllocationService
 
     $allocation6 = new ExpenseAllocation();
     $allocation6->user_id = $user->id;
-    $allocation6->transaction_category_id = $expenseCategories->firstWhere('name', 'Cicilan')->id;
+    $allocation6->transaction_category_id = $transactionCategories->firstWhere('name', 'Cicilan')->id;
     $allocation6->percentage = 20;
     $allocation6->amount = $this->calculateAllocationAmount($allocation6->percentage, $user->monthly_salary);
     $allocation6->color = "#650041";
