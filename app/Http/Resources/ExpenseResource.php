@@ -16,9 +16,9 @@ class ExpenseResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            "expense_category_name" => $this->expense_category->name,
-            "expense_category_id" => $this->expense_category->id,
-            "expense_category_icon" => $this->expense_category->icon,
+            "transaction_category_name" => $this->transaction_category->name,
+            "transaction_category_id" => $this->transaction_category->id,
+            "transaction_category_icon" => $this->transaction_category->icon,
             "date" => $this->date,
             "amount" => $this->amount,
             "note" => $this->note,

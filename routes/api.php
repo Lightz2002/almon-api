@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExpenseAllocationController;
-use App\Http\Controllers\ExpenseCategoryController;
+use App\Http\Controllers\TransactionCategoryController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\SecurityQuestionController;
 use App\Http\Controllers\UserController;
@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('expense/summary', [ExpenseController::class, 'summary']);
     Route::resource('expense', ExpenseController::class);
 
-    Route::resource('expense-category', ExpenseCategoryController::class);
+    Route::resource('transaction-category', TransactionCategoryController::class);
 
     Route::post('expense-allocation/generate/{user}', [ExpenseAllocationController::class, 'generateAllocation']);
     Route::get('expense-allocation/list/{user}', [ExpenseAllocationController::class, 'index']);

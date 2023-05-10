@@ -75,7 +75,7 @@ if (!function_exists('getValidationMessage')) {
       'date.date_format:Y-m-d' => 'Tanggal harus menggunakan format sesuai contohnya 2023-01-31',
       'amount.required' => 'Jumlah' . $requiredMessage,
       'amount.numeric' => 'Jumlah' . $numericFormat,
-      'expense_category_id.required' => 'Kategori pengeluaran' . $requiredMessage,
+      'transaction_category_id.required' => 'Kategori transaksi' . $requiredMessage,
       'monthly_salary.required' => 'Gaji' . $requiredMessage,
       'monthly_salary.numeric' => 'Gaji' . $numericFormat,
       'token.size' => 'Token harus berupa 6 karakter',

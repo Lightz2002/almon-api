@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ExpenseResource;
 use App\Models\Expense;
 use App\Models\ExpenseAllocation;
-use App\Models\ExpenseCategory;
+use App\Models\TransactionCategory;
 use App\Services\ExpenseAllocationService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -20,13 +20,13 @@ class ExpenseController extends Controller
         $request->validate([
             'date' => 'required|date_format:Y-m-d',
             'amount' => 'required|numeric',
-            'expense_category_id' => 'required',
+            'transaction_category_id' => 'required',
         ], getValidationMessage());
     }
 
     private function fillInput(Expense $expense, Request $request)
     {
-        $expense->expense_category_id = $request->expense_category_id;
+        $expense->transaction_category_id = $request->transaction_category_id;
         $expense->date = $request->date;
         $expense->amount = $request->amount;
         $expense->note = $request->note;
@@ -150,7 +150,7 @@ class ExpenseController extends Controller
     public function sumAmountByCategory($monthlyExpense, $expenseCategory)
     {
         $filteredExpense = $monthlyExpense->filter(function ($item) use ($expenseCategory) {
-            return $item->expense_category->name === $expenseCategory->name;
+            return $item->transaction_category->name === $expenseCategory->name;
         });
 
         return $filteredExpense->first()->amount ?? 0;
@@ -165,7 +165,7 @@ class ExpenseController extends Controller
     {
         $remain = $this->calculateRemain();
 
-        $expenseCategories = ExpenseCategory::all();
+        $expenseCategories = TransactionCategory::all();
         $expenseAllocations = ExpenseAllocation::get();
         $monthlyExpense = Expense::month()->get();
 

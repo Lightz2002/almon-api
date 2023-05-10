@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ExpenseCategoryResource;
-use App\Models\ExpenseCategory;
+use App\Http\Resources\TransactionCategoryResource;
+use App\Models\TransactionCategory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class ExpenseCategoryController extends Controller
+class TransactionCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,8 @@ class ExpenseCategoryController extends Controller
      */
     public function index()
     {
-        $expenseCategories = ExpenseCategory::all();
-        return ExpenseCategoryResource::collection($expenseCategories);
+        $expenseCategories = TransactionCategory::all();
+        return TransactionCategoryResource::collection($expenseCategories);
     }
 
     /**

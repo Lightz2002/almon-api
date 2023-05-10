@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\ExpenseCategory;
+use App\Models\TransactionCategory;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->date('date')->default(now());
             $table->bigInteger('amount')->default(0);
-            $table->foreignIdFor(ExpenseCategory::class);
+            $table->foreignIdFor(TransactionCategory::class);
             $table->foreignIdFor(User::class);
             $table->longText('note')->nullable();
             $table->timestamps();

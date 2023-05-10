@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SecurityQuestionSeeder::class,
             UserSeeder::class,
-            ExpenseCategorySeeder::class,
+            TransactionCategorySeeder::class,
             ExpenseSeeder::class,
         ]);
     }

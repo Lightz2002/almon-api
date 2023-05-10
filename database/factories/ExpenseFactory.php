@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\ExpenseCategory;
+use App\Models\TransactionCategory;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -22,7 +22,7 @@ class ExpenseFactory extends Factory
         return [
             'amount' => fake()->randomFloat(),
             'date' => now(),
-            'expense_category_id' => ExpenseCategory::inRandomOrder()->first(),
+            'transaction_category_id' => TransactionCategory::inRandomOrder()->first(),
             'user_id' => User::firstWhere('username', 'ryan')->id,
             'note' => Str::random(50),
         ];

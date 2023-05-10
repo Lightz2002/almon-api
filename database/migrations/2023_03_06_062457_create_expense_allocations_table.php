@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\User;
-use App\Models\ExpenseCategory;
+use App\Models\TransactionCategory;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create('expense_allocations', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignIdFor(User::class);
-            $table->foreignIdFor(ExpenseCategory::class);
+            $table->foreignIdFor(TransactionCategory::class);
             $table->bigInteger('amount');
             $table->smallInteger('percentage');
             $table->string('color', 25);

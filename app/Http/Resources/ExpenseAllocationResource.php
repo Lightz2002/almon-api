@@ -16,8 +16,8 @@ class ExpenseAllocationResource extends JsonResource
   {
     return [
       'id' => $this->id,
-      'name' => $this->expense_category->name,
-      'icon' => $this->expense_category->icon,
+      'name' => $this->transaction_category->name,
+      'icon' => $this->transaction_category->icon,
       'amount' => $this->amount,
       'color' => $this->color,
       'percentage' => $this->percentage

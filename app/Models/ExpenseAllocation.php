@@ -23,9 +23,9 @@ class ExpenseAllocation extends Model
     /**
      * Get the phone associated with the user.
      */
-    public function expense_category()
+    public function transaction_category()
     {
-        return $this->belongsTo(ExpenseCategory::class);
+        return $this->belongsTo(TransactionCategory::class);
     }
 
 

@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('expense_categories', function (Blueprint $table) {
+        Schema::create('transaction_categories', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name', 15);
             $table->string('icon')->nullable();
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('expense_categories');
+        Schema::dropIfExists('transaction_categories');
     }
 };

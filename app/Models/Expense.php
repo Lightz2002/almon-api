@@ -24,9 +24,9 @@ class Expense extends Model
     /**
      * Get the category of this expenses
      */
-    public function expense_category()
+    public function transaction_category()
     {
-        return $this->belongsTo(ExpenseCategory::class);
+        return $this->belongsTo(TransactionCategory::class);
     }
 
 
