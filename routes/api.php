@@ -3,7 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExpenseAllocationController;
 use App\Http\Controllers\TransactionCategoryController;
-use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\SecurityQuestionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -29,9 +29,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/profile', 'profile');
     });
 
-    Route::get('expense/budget-info', [ExpenseController::class, 'budgetInfo']);
-    Route::get('expense/summary', [ExpenseController::class, 'summary']);
-    Route::resource('expense', ExpenseController::class);
+    Route::get('expense/budget-info', [TransactionController::class, 'budgetInfo']);
+    Route::get('expense/summary', [TransactionController::class, 'summary']);
+    Route::resource('transaction', TransactionController::class);
 
     Route::resource('transaction-category', TransactionCategoryController::class);
 
