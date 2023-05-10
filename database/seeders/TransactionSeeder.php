@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Expense;
+use App\Models\Transaction;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class ExpenseSeeder extends Seeder
+class TransactionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,6 +15,6 @@ class ExpenseSeeder extends Seeder
      */
     public function run()
     {
-        Expense::factory()->count(5)->create();
+        Transaction::factory()->count(5)->create();
     }
 }

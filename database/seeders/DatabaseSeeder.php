@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             SecurityQuestionSeeder::class,
             UserSeeder::class,
             TransactionCategorySeeder::class,
-            ExpenseSeeder::class,
+            TransactionSeeder::class,
         ]);
     }
 }

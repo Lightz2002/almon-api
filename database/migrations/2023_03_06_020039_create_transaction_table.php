@@ -15,13 +15,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('expenses', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->date('date')->default(now());
             $table->bigInteger('amount')->default(0);
-            $table->foreignIdFor(TransactionCategory::class);
-            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(TransactionCategory::class)->constrained();
+            $table->foreignIdFor(User::class)->constrained();
             $table->longText('note')->nullable();
+            $table->enum('type', ['income', 'expense'])->default('expense');
             $table->timestamps();
         });
     }
@@ -33,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('expense');
+        Schema::dropIfExists('transactions');
     }
 };
