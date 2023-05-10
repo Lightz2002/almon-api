@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ExpenseResource;
-use App\Models\Expense;
+use App\Http\Resources\TransactionResource;
+use App\Models\Transaction;
 use App\Models\ExpenseAllocation;
 use App\Models\TransactionCategory;
 use App\Services\ExpenseAllocationService;
@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-class ExpenseController extends Controller
+class TransactionController extends Controller
 {
     protected $expenseAllocationService;
 
@@ -20,19 +20,21 @@ class ExpenseController extends Controller
         $request->validate([
             'date' => 'required|date_format:Y-m-d',
             'amount' => 'required|numeric',
-            'transaction_category_id' => 'required',
+            'type' => 'required|in:income,expense',
+            'transaction_category_id' => 'required|exists:transaction_categories,id',
         ], getValidationMessage());
     }
 
-    private function fillInput(Expense $expense, Request $request)
+    private function fillInput(Transaction $transaction, Request $request)
     {
-        $expense->transaction_category_id = $request->transaction_category_id;
-        $expense->date = $request->date;
-        $expense->amount = $request->amount;
-        $expense->note = $request->note;
-        $expense->save();
+        $transaction->type = $request->type;
+        $transaction->transaction_category_id = $request->transaction_category_id;
+        $transaction->date = $request->date;
+        $transaction->amount = $request->amount;
+        $transaction->note = $request->note;
+        $transaction->save();
 
-        return $expense;
+        return $transaction;
     }
 
     public function __construct()
@@ -47,9 +49,9 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        $expenses = Expense::month()->orderBy('created_at')->get();
+        $expenses = Transaction::month()->orderBy('created_at')->get();
         return [
-            "data" => ExpenseResource::collection($expenses)->groupBy('date')
+            "data" => TransactionResource::collection($expenses)->groupBy('date')
         ];
     }
 
@@ -64,11 +66,11 @@ class ExpenseController extends Controller
         try {
             $this->validateInput($request);
 
-            $expense = new Expense();
-            $expense->user_id = Auth::User()->id;
-            $this->fillInput($expense, $request);
+            $transaction = new Transaction();
+            $transaction->user_id = Auth::User()->id;
+            $this->fillInput($transaction, $request);
 
-            return new ExpenseResource($expense);
+            return new TransactionResource($transaction);
         } catch (\Exception $e) {
             return handleException($e);
         }
@@ -77,29 +79,29 @@ class ExpenseController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Expense  $expense
+     * @param  \App\Models\Transaction  $transaction
      * @return \Illuminate\Http\Response
      */
-    public function show(Expense $expense)
+    public function show(Transaction $transaction)
     {
-        return new ExpenseResource($expense);
+        return new TransactionResource($transaction);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Expense  $expense
+     * @param  \App\Models\Transaction  $transaction
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Expense $expense)
+    public function update(Request $request, Transaction $transaction)
     {
         try {
             $this->validateInput($request);
 
-            $this->fillInput($expense, $request);
+            $this->fillInput($transaction, $request);
 
-            return new ExpenseResource($expense);
+            return new TransactionResource($transaction);
         } catch (\Exception $e) {
             return handleException($e);
         }
@@ -108,12 +110,12 @@ class ExpenseController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Expense  $expense
+     * @param  \App\Models\Transaction  $transaction
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Expense $expense)
+    public function destroy(Transaction $transaction)
     {
-        $expense->delete();
+        $transaction->delete();
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
@@ -122,7 +124,7 @@ class ExpenseController extends Controller
     {
         $user = Auth::user();
         $monthlySalary = $user->monthly_salary;
-        $monthlyExpenses = Expense::month()->get()->sum('amount');
+        $monthlyExpenses = Transaction::month()->get()->sum('amount');
         $monthlyRemain = $monthlySalary - $monthlyExpenses;
 
         return (object) [
@@ -133,7 +135,7 @@ class ExpenseController extends Controller
     }
 
     /**
-     * Get Monthly Expense, Salary, and LeftOvers
+     * Get Monthly Transaction, Salary, and LeftOvers
      *
      * @return \Illuminate\Http\Response
      */
@@ -157,7 +159,7 @@ class ExpenseController extends Controller
     }
 
     /**
-     * Get Monthly Expense, Salary, and LeftOvers
+     * Get Monthly Transaction, Salary, and LeftOvers
      *
      * @return \Illuminate\Http\Response
      */
@@ -165,9 +167,9 @@ class ExpenseController extends Controller
     {
         $remain = $this->calculateRemain();
 
-        $expenseCategories = TransactionCategory::all();
+        $transactionCategories = TransactionCategory::all();
         $expenseAllocations = ExpenseAllocation::get();
-        $monthlyExpense = Expense::month()->get();
+        $monthlyExpense = Transaction::month()->get();
 
         $data = (object) [
             'salary' => $remain->salary,
@@ -176,7 +178,7 @@ class ExpenseController extends Controller
             'categories' => []
         ];
 
-        foreach ($expenseCategories as $expenseCategory) {
+        foreach ($transactionCategories as $expenseCategory) {
             $expenseCategory->allocation = $this->expenseAllocationService->getAllocationAmountByCategory($expenseAllocations, $expenseCategory);
             $expenseCategory->expense = $this->sumAmountByCategory($monthlyExpense, $expenseCategory);
             $data->categories[] = $expenseCategory;

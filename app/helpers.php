@@ -76,9 +76,12 @@ if (!function_exists('getValidationMessage')) {
       'amount.required' => 'Jumlah' . $requiredMessage,
       'amount.numeric' => 'Jumlah' . $numericFormat,
       'transaction_category_id.required' => 'Kategori transaksi' . $requiredMessage,
+      'transaction_category_id.exists' => 'Tidak terdapat kategori transaksi yang dipilih',
       'monthly_salary.required' => 'Gaji' . $requiredMessage,
       'monthly_salary.numeric' => 'Gaji' . $numericFormat,
       'token.size' => 'Token harus berupa 6 karakter',
+      'type.required' => 'Tipe' . $requiredMessage,
+      'type.in' => 'Tipe harus berupa income atau expense',
     ];
   }
 }
