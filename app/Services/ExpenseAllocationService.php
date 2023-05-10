@@ -77,10 +77,10 @@ class ExpenseAllocationService
     }
   }
 
-  public function getAllocationAmountByCategory($expenseAllocations, $expenseCategory)
+  public function getAllocationAmountByCategory($expenseAllocations, $transactionCategory)
   {
-    $filteredExpenseAllocation = $expenseAllocations->filter(function ($item) use ($expenseCategory) {
-      return $item->transaction_category->name === $expenseCategory->name;
+    $filteredExpenseAllocation = $expenseAllocations->filter(function ($item) use ($transactionCategory) {
+      return $item->transaction_category->name === $transactionCategory->name;
     });
 
     return $filteredExpenseAllocation->first()->amount ?? 0;
