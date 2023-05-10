@@ -149,10 +149,10 @@ class TransactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function sumAmountByCategory($monthlyExpense, $expenseCategory)
+    public function sumAmountByCategory($monthlyExpense, $transactionCategory)
     {
-        $filteredExpense = $monthlyExpense->filter(function ($item) use ($expenseCategory) {
-            return $item->transaction_category->name === $expenseCategory->name;
+        $filteredExpense = $monthlyExpense->filter(function ($item) use ($transactionCategory) {
+            return $item->transaction_category->name === $transactionCategory->name;
         });
 
         return $filteredExpense->first()->amount ?? 0;
@@ -178,10 +178,10 @@ class TransactionController extends Controller
             'categories' => []
         ];
 
-        foreach ($transactionCategories as $expenseCategory) {
-            $expenseCategory->allocation = $this->expenseAllocationService->getAllocationAmountByCategory($expenseAllocations, $expenseCategory);
-            $expenseCategory->expense = $this->sumAmountByCategory($monthlyExpense, $expenseCategory);
-            $data->categories[] = $expenseCategory;
+        foreach ($transactionCategories as $transactionCategory) {
+            $transactionCategory->allocation = $this->expenseAllocationService->getAllocationAmountByCategory($expenseAllocations, $transactionCategory);
+            $transactionCategory->expense = $this->sumAmountByCategory($monthlyExpense, $transactionCategory);
+            $data->categories[] = $transactionCategory;
         }
 
         return response()->json($data, Response::HTTP_OK);
