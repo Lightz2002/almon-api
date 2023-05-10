@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TransactionTypeEnum;
 use App\Models\Scopes\SelfExpenseScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -28,6 +29,13 @@ class Transaction extends Model
     {
         return $this->belongsTo(TransactionCategory::class);
     }
+
+    protected $casts = [
+        'status' => TransactionTypeEnum::class,
+        'nullable_enum' => TransactionTypeEnum::class . ':nullable',
+        'array_of_enums' => TransactionTypeEnum::class . ':collection',
+        'nullable_array_of_enums' => TransactionTypeEnum::class . ':collection,nullable',
+    ];
 
 
 
