@@ -56,9 +56,29 @@ class Transaction extends Model
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeMonth($query)
-    {
-        return $query->where('date', '>=', Carbon::now()->startOfMonth()->toDateString())
-            ->where('date', '<=', Carbon::now()->endOfMonth()->toDateString());
+    public function scopeMonth(
+        $query,
+        $start = null,
+        $end = null
+    ) {
+        $start = $start ?? Carbon::now()->startOfMonth()->toDateString();
+        $end = $end ?? Carbon::now()->endOfMonth()->toDateString();
+
+        return $query->where('date', '>=', $start)
+            ->where('date', '<=', $end);
+    }
+
+    /**
+     * Scope a query for specific type
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeType(
+        $query,
+        $type = null
+    ) {
+        $type = $type === 'income' ? TransactionTypeEnum::income() : TransactionTypeEnum::expense();
+        return $query->where('type', '=', $type->value);
     }
 }
