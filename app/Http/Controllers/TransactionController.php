@@ -6,7 +6,9 @@ use App\Http\Resources\TransactionResource;
 use App\Models\Transaction;
 use App\Models\ExpenseAllocation;
 use App\Models\TransactionCategory;
+use App\Services\BalanceService;
 use App\Services\ExpenseAllocationService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 class TransactionController extends Controller
 {
     protected $expenseAllocationService;
+    protected $balanceService;
 
     private function validateInput(Request $request)
     {
@@ -40,6 +43,7 @@ class TransactionController extends Controller
     public function __construct()
     {
         $this->expenseAllocationService = new ExpenseAllocationService();
+        $this->balanceService = new BalanceService();
     }
 
     /**
@@ -69,6 +73,10 @@ class TransactionController extends Controller
             $transaction = new Transaction();
             $transaction->user_id = Auth::User()->id;
             $this->fillInput($transaction, $request);
+
+            // sync current month balance
+            $this->balanceService->updateCurrentMonthBalance();
+
 
             return new TransactionResource($transaction);
         } catch (\Exception $e) {
@@ -101,6 +109,8 @@ class TransactionController extends Controller
 
             $this->fillInput($transaction, $request);
 
+            $this->balanceService->updateCurrentMonthBalance();
+
             return new TransactionResource($transaction);
         } catch (\Exception $e) {
             return handleException($e);
@@ -116,16 +126,20 @@ class TransactionController extends Controller
     public function destroy(Transaction $transaction)
     {
         $transaction->delete();
+        $this->balanceService->updateCurrentMonthBalance();
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
 
     private function calculateRemain()
     {
+        // calculate remain from this month balance expense - this month balance income
         $user = Auth::user();
+        $balance = $this->balanceService->updateCurrentMonthBalance();
+
         $monthlySalary = $user->monthly_salary;
-        $monthlyExpenses = Transaction::month()->get()->sum('amount');
-        $monthlyRemain = $monthlySalary - $monthlyExpenses;
+        $monthlyExpenses = $balance->expense_amount;
+        $monthlyRemain = $balance->expense_amount - $balance->income_amount;
 
         return (object) [
             'salary' => $monthlySalary,
@@ -169,7 +183,7 @@ class TransactionController extends Controller
 
         $transactionCategories = TransactionCategory::all();
         $expenseAllocations = ExpenseAllocation::get();
-        $monthlyExpense = Transaction::month()->get();
+        $monthlyExpense = Transaction::type('expense')->month()->get();
 
         $data = (object) [
             'salary' => $remain->salary,
