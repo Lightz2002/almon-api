@@ -139,7 +139,7 @@ class TransactionController extends Controller
 
         $monthlySalary = $user->monthly_salary;
         $monthlyExpenses = $balance->expense_amount;
-        $monthlyRemain = $balance->expense_amount - $balance->income_amount;
+        $monthlyRemain =  $balance->income_amount - $balance->expense_amount;
 
         return (object) [
             'salary' => $monthlySalary,
