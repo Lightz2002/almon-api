@@ -20,6 +20,6 @@ class Balance extends Model
     public function scopeMonth($query, $date = null)
     {
         $date = $date ?? Carbon::now()->format('Y-m');
-        return $query->where('date', '=', $date);
+        return $query->whereRaw("DATE_FORMAT(date,'%Y-%m') = '$date'");
     }
 }
