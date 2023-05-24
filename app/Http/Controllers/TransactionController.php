@@ -53,7 +53,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $expenses = Transaction::month()->orderBy('created_at')->get();
+        $expenses = Transaction::month()->orderByDesc('date')->get();
         return [
             "data" => TransactionResource::collection($expenses)->groupBy('date')
         ];
